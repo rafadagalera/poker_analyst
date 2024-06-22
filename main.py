@@ -7,7 +7,11 @@ class Hands:
     def __init__(self):
         self.player1_hand = []
         self.player2_hand = []
+        self.hand_types = ("Royal Flush","Straight Flush","Four-of-a-Kind","Full House","Flush","Straight","Three-of-a-Kind","Two Pair","One Pair","High Card")
+
         self.cards = []
+
+
     def draw_cards(self):
         # This will pick a random hand from the file of possible hands and assure that every player has a unique hand
         try:
@@ -36,7 +40,10 @@ class Game:
         self.hands = Hands()
         self.hands.draw_cards()
     def preflop(self):
-        #This will handle the preflop events
+        # This will handle the preflop events
+        print("My hand:",self.hands.player1_hand)
+        # Here only for testing purposes, will remove later
+        print("Opponent's hand:", self.hands.player2_hand)
         pass
     def flop(self):
         #This will handle the flop events
@@ -47,5 +54,16 @@ class Game:
     def river(self):
         #This will handle the river events
         pass
+    def determine_winner():
+        #This will determine the winner of the hand
+        pass
+
+    def main(self):
+        self.preflop()
+        self.flop()
+        self.turn()
+        self.river()
+        self.determine_winner()
+
 
 
