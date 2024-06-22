@@ -47,12 +47,13 @@ class Game:
         # 0: High Card
         
         hand_strength = 0
-        full_player_hand = [hand + self.community_cards]
+        full_player_hand = hand + self.community_cards
         sorted_hand = []
         for card in full_player_hand:
             value = card[:-1]
             suit = card[-1]
             sorted_hand.append((value,suit))
+        print(full_player_hand)    
         print(sorted_hand)
             
     def determine_winner(self,hand1,hand2):
