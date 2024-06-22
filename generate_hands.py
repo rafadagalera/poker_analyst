@@ -33,3 +33,4 @@ class Possible_Hands:
             json.dump(possible_hands_list, f, indent=4)
 
 hands = Possible_Hands()
+

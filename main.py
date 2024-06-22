@@ -1,5 +1,8 @@
 import random, json
 
+# The first version of this game only allows for two players and discredits bets and fold
+
+
 class Hands:
     def __init__(self):
         self.player1_hand = []
@@ -28,5 +31,21 @@ class Hands:
         # This will determine which hand is stronger
         pass
 
-hands = Hands()
-hands.draw_cards()
+class Game:
+    def __init__(self):
+        self.hands = Hands()
+        self.hands.draw_cards()
+    def preflop(self):
+        #This will handle the preflop events
+        pass
+    def flop(self):
+        #This will handle the flop events
+        pass
+    def turn(self):
+        #This will handle the turn events
+        pass
+    def river(self):
+        #This will handle the river events
+        pass
+
+
