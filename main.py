@@ -8,11 +8,11 @@ class Hands:
         self.player1_hand = []
         self.player2_hand = []
         self.hand_types = ("Royal Flush","Straight Flush","Four-of-a-Kind","Full House","Flush","Straight","Three-of-a-Kind","Two Pair","One Pair","High Card")
-
         self.cards = []
 
 
     def draw_cards(self):
+        ### Please update this function to draw a single card each time, remove that card from the deck and keep track of every hand on another function-+
         # This will pick a random hand from the file of possible hands and assure that every player has a unique hand
         try:
             with open('possible_hands.json', 'r') as f:
@@ -37,6 +37,7 @@ class Hands:
 
 class Game:
     def __init__(self):
+        self.community_cards = 0
         self.hands = Hands()
         self.hands.draw_cards()
     def preflop(self):
@@ -47,6 +48,8 @@ class Game:
         pass
     def flop(self):
         #This will handle the flop events
+        if self.community_cards == 0:
+            first_community_card = random.choice(possible_hands)
         pass
     def turn(self):
         #This will handle the turn events
