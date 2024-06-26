@@ -12,7 +12,7 @@
 # pair
 # two pair
 # 4OFK
-# debug determine_winner
+# debug showdown
 
 from cards import *
 
@@ -58,7 +58,6 @@ class Game:
     
     # this section will determine the winner of the showdown
     
-    # checks for a straight
     def straight(self, player_hand): 
         sorted_hand = self.sort_player_hand_values(player_hand)
         # checks if the last card is exactly one less in calue then current card
@@ -68,19 +67,18 @@ class Game:
                     return False
             return True
 
-        # Step 2: Check each of the 3 possible 5-card hands
+        # checks each of the 3 possible 5-card hands
         for i in range(3):
             hand = sorted_hand[i:i+5]
             if is_straight(hand):
                 return True
         
         return False
-    # checks for a flush
     def flush(self, player_hand):
         suits = [card[1] for card in player_hand]
         for i in range(4):
             if suits.count(suits[i]) == 5:
-                return True
+                return True        
     def three_of_a_kind(self,player_hand):
         sorted_hand = self.sort_player_hand_values(player_hand)
         for i in range(4):
@@ -134,7 +132,7 @@ class Game:
         else:
             return 9
         # Determine the winner of the hand
-    def determine_winner(self,player1_hand, player2_hand):
+    def showdown(self,player1_hand, player2_hand):
         player1_hand_rank = self.determine_hand_rank(player1_hand)
         player2_hand_rank = self.determine_hand_rank(player2_hand)
         if player1_hand_rank < player2_hand_rank:
@@ -159,7 +157,7 @@ class Game:
         print(player1_full_hand,player2_full_hand)
         a = self.sort_player_hand(player1_full_hand)
         print(a)
-        test = self.determine_winner(player1_full_hand,player2_full_hand)
+        test = self.showdown(player1_full_hand,player2_full_hand)
         print(test)
         
 game = Game()            
