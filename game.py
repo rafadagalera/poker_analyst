@@ -113,6 +113,7 @@ class Game:
         # 7. Two Pair
         # 8. Pair
         # 9. High Card
+    # check recursively for the strongest to weakest hand
         if self.straight(player_hand) and self.flush(player_hand):
             return 1
         elif self.four_of_a_kind(player_hand):
@@ -143,7 +144,6 @@ class Game:
             # theres more stuff to do here
             return print("Tie")
                 
-    # check recursively for the strongest to weakest hand
     def main(self):
         self.preflop()
         self.flop()
