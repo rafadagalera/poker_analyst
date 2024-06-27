@@ -1,9 +1,9 @@
 ## to do
 # currently the draw cards function does not remove the cards from the deck, fix that you pos
 # account for higher values when players have the same hand rank
-# return what the winning hand was
 # high card
 ## doing
+# debug two pair function
 ## done
 # full house
 # straight flush
@@ -14,6 +14,7 @@
 # two pair
 # 4OFK
 # debug showdown
+# return what the winning hand was
 
 from cards import *
 
@@ -31,7 +32,8 @@ class Game:
     def preflop(self):
         self.cards.deal_card(self.player1_hand,2)
         self.cards.deal_card(self.player2_hand,2)
-        return print("Player 1: ",self.player1_hand, "Player 2: ",self.player2_hand)
+        print("Player 1 hand:",self.player1_hand,"Player 2 hand:",self.player2_hand)
+        return self.player1_hand, self.player2_hand
     def flop(self):
         self.cards.deal_card(self.community_cards,3)
     def turn(self):
@@ -86,13 +88,15 @@ class Game:
         for i in range(4):
             if sorted_hand.count(sorted_hand[i]) == 3:
                 return True
-    def two_pair(self,player_hand):
+    def two_pair(self, player_hand):
         sorted_hand = self.sort_player_hand_values(player_hand)
         is_pair = []
+        pair_values = set()  # Use a set to keep track of unique pair values
         for i in range(4):
-            if sorted_hand.count(sorted_hand[i]) == 2:
+            if sorted_hand.count(sorted_hand[i]) == 2 and sorted_hand[i] not in pair_values:
                 is_pair.append(sorted_hand[i])
-                if len(is_pair) == 2:
+                pair_values.add(sorted_hand[i])  # Add the value to the set of pair values
+                if len(is_pair) >= 2:
                     return True
     def pair(self,player_hand):
         sorted_hand = self.sort_player_hand_values(player_hand)
@@ -153,10 +157,11 @@ class Game:
     def showdown(self,player1_hand, player2_hand):
         player1_hand_rank = self.determine_hand_rank(player1_hand)
         player2_hand_rank = self.determine_hand_rank(player2_hand)
+        
         if player1_hand_rank < player2_hand_rank:
-            return print("Player 1 wins ")
+            return print(f"Player 1 wins with {self.hand_ranks[player1_hand_rank]}")
         elif player1_hand_rank > player2_hand_rank:
-            return print("Player 2 wins ")
+            return print(f"Player 2 wins {self.hand_ranks[player2_hand_rank]}")
         else:
             return self.tiebreaker(player1_hand,player2_hand,player1_hand)
             
@@ -171,9 +176,10 @@ class Game:
         print("River: ",self.community_cards)
         player1_full_hand = self.get_full_player_hand(self.player1_hand)
         player2_full_hand = self.get_full_player_hand(self.player2_hand)
-        print(player1_full_hand,player2_full_hand)
+        # print(player1_full_hand,player2_full_hand)
         a = self.sort_player_hand(player1_full_hand)
-        print(a)
+        b = self.sort_player_hand(player2_full_hand)
+        print(a,b)
         test = self.showdown(player1_full_hand,player2_full_hand)
         print(test)
         

@@ -21,15 +21,15 @@ suits = {
 }
 
 hand_ranks = {
-    "Straight Flush": 1,
-    "Four of a Kind": 2,
-    "Full House": 3,
-    "Flush": 4,
-    "Straight": 5,
-    "Three of a Kind": 6,
-    "Two Pair": 7,
-    "Pair": 8,
-    "High Card": 9
+    1: "Straight Flush",
+    2: "Four of a Kind",
+    3: "Full House",
+    4: "Flush",
+    5: "Straight",
+    6: "Three of a Kind",
+    7: "Two Pair",
+    8: "Pair",
+    9: "High Card"
 }
 
 deck = []

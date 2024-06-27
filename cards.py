@@ -22,4 +22,3 @@ class Cards:
             
 cards = Cards()
 
-# print(cards.get_card_value("A"))    
