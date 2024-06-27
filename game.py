@@ -1,4 +1,5 @@
 ## to do
+# currently the draw cards function does not remove the cards from the deck, fix that you pos
 # account for higher values when players have the same hand rank
 # return what the winning hand was
 # high card
@@ -57,7 +58,11 @@ class Game:
         return sorted(values)
     
     # this section will determine the winner of the showdown
-    
+    def flush(self, player_hand):
+        suits = [card[1] for card in player_hand]
+        for i in range(4):
+            if suits.count(suits[i]) == 5:
+                return True        
     def straight(self, player_hand): 
         sorted_hand = self.sort_player_hand_values(player_hand)
         # checks if the last card is exactly one less in calue then current card
@@ -66,28 +71,20 @@ class Game:
                 if hand[i] + 1 != hand[i + 1]:
                     return False
             return True
-
         # checks each of the 3 possible 5-card hands
         for i in range(3):
             hand = sorted_hand[i:i+5]
             if is_straight(hand):
                 return True
-        
-        return False
-    def flush(self, player_hand):
-        suits = [card[1] for card in player_hand]
+    def four_of_a_kind(self,player_hand):
+        sorted_hand = self.sort_player_hand_values(player_hand)
         for i in range(4):
-            if suits.count(suits[i]) == 5:
-                return True        
+            if sorted_hand.count(sorted_hand[i]) == 4:
+                return True
     def three_of_a_kind(self,player_hand):
         sorted_hand = self.sort_player_hand_values(player_hand)
         for i in range(4):
             if sorted_hand.count(sorted_hand[i]) == 3:
-                return True
-    def pair(self,player_hand):
-        sorted_hand = self.sort_player_hand_values(player_hand)
-        for i in range(4):
-            if sorted_hand.count(sorted_hand[i]) == 2:
                 return True
     def two_pair(self,player_hand):
         sorted_hand = self.sort_player_hand_values(player_hand)
@@ -97,10 +94,10 @@ class Game:
                 is_pair.append(sorted_hand[i])
                 if len(is_pair) == 2:
                     return True
-    def four_of_a_kind(self,player_hand):
+    def pair(self,player_hand):
         sorted_hand = self.sort_player_hand_values(player_hand)
         for i in range(4):
-            if sorted_hand.count(sorted_hand[i]) == 4:
+            if sorted_hand.count(sorted_hand[i]) == 2:
                 return True
     def determine_hand_rank(self,player_hand):
         # Hand rankings: 
@@ -132,7 +129,27 @@ class Game:
             return 8
         else:
             return 9
-        # Determine the winner of the hand
+    def tiebreaker(self,player1_hand,player2_hand,hand):
+        # if both players have the same hand rank, we need to determine the winner based on the
+        # highest card in the hand. If the hands are still tied, we need to determine the
+        # winner based on the second highest card in the hand, and so on.
+        player1_hand_sorted = self.sort_player_hand(player1_hand)
+        player2_hand_sorted = self.sort_player_hand(player2_hand)
+        if self.determine_hand_rank(hand) == 9:
+            if player1_hand_sorted[0] > player2_hand_sorted[0]:
+                return player1_hand
+            elif player1_hand_sorted[0]< player2_hand_sorted[0]:
+                return player2_hand
+            else:
+                if player1_hand_sorted[1] > player2_hand_sorted[1]:
+                    return player1_hand
+                elif player1_hand_sorted[1] < player1_hand_sorted[1]:
+                    return player2_hand
+                else:
+                    return print("It's a tie! Split the pot")
+        # elif self.determine_hand_rank(hand) == 8:
+                    
+    # Determine the winner of the hand
     def showdown(self,player1_hand, player2_hand):
         player1_hand_rank = self.determine_hand_rank(player1_hand)
         player2_hand_rank = self.determine_hand_rank(player2_hand)
@@ -141,8 +158,8 @@ class Game:
         elif player1_hand_rank > player2_hand_rank:
             return print("Player 2 wins ")
         else:
-            # theres more stuff to do here
-            return print("Tie")
+            return self.tiebreaker(player1_hand,player2_hand,player1_hand)
+            
                 
     def main(self):
         self.preflop()
