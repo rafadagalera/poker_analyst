@@ -89,27 +89,21 @@ class Game:
             if sorted_hand.count(sorted_hand[i]) == 3:
                 return True
     def two_pair(self, player_hand):
-        sorted_hand = self.sort_player_hand_values(player_hand)
-        is_pair = []
-        pair_values = set()  # Use a set to keep track of unique pair values
-        for i in range(4):
-            if sorted_hand.count(sorted_hand[i]) == 2 and sorted_hand[i] not in pair_values:
-                is_pair.append(sorted_hand[i])
-                pair_values.add(sorted_hand[i])  # Add the value to the set of pair values
-                if len(is_pair) >= 2:
-                    return True
-    def pair(self,player_hand):
-        sorted_hand = self.sort_player_hand_values(player_hand)
-        for i in range(4):
-            if sorted_hand.count(sorted_hand[i]) == 2:
-                return True        
-    def determine_hand_rank(self,player_hand):
-    # check recursively for the strongest to weakest hand
+        values = self.sort_player_hand_values(player_hand)
+        pairs = [value for value in set(values) if values.count(value) == 2]
+        return len(pairs) >= 2
+
+    def pair(self, player_hand):
+        values = self.sort_player_hand_values(player_hand)
+        pairs = [value for value in set(values) if values.count(value) == 2]
+        return len(pairs) >= 1
+    
+    def determine_hand_rank(self, player_hand):
         if self.straight(player_hand) and self.flush(player_hand):
             return 1
         elif self.four_of_a_kind(player_hand):
             return 2
-        elif self.three_of_a_kind(player_hand) and self.two_pair(player_hand):
+        elif self.three_of_a_kind(player_hand) and self.pair(player_hand):
             return 3
         elif self.flush(player_hand):
             return 4
@@ -172,7 +166,10 @@ class Game:
         print(a,b)
         test = self.showdown(player1_full_hand,player2_full_hand)
         print(test)
-        print(self.sort_player_hand_values(player1_full_hand))
+        # print(self.sort_player_hand_values(player1_full_hand))
+        # print(self.sort_player_hand_values(player2_full_hand))
+        print(self.sort_player_hand(player1_full_hand))
+        print(self.sort_player_hand(player2_full_hand))
         
 game = Game()            
 game.main()
