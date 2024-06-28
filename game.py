@@ -1,7 +1,6 @@
 ## to do
 # currently the draw cards function does not remove the cards from the deck, fix that you pos
 # account for higher values when players have the same hand rank
-# debug two pair function
 ## doing
 # high card
 ## done
@@ -15,6 +14,7 @@
 # 4OFK
 # debug showdown
 # return what the winning hand was
+# debug two pair function
 
 from cards import *
 
@@ -65,18 +65,12 @@ class Game:
         for i in range(4):
             if suits.count(suits[i]) == 5:
                 return True        
-    def straight(self, player_hand): 
+    def straight(self, player_hand):
         sorted_hand = self.sort_player_hand_values(player_hand)
-        # checks if the last card is exactly one less in calue then current card
-        def is_straight(hand):
-            for i in range(4):
-                if hand[i] + 1 != hand[i + 1]:
-                    return False
-            return True
-        # checks each of the 3 possible 5-card hands
-        for i in range(3):
-            hand = sorted_hand[i:i+5]
-            if is_straight(hand):
+        unique_values = sorted(set(sorted_hand), reverse=True)
+
+        for i in range(len(unique_values) - 4):
+            if unique_values[i] - unique_values[i + 4] == 4:
                 return True
     def four_of_a_kind(self,player_hand):
         sorted_hand = self.sort_player_hand_values(player_hand)
