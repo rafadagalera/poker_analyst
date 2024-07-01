@@ -20,6 +20,9 @@ from cards import *
 
 class Game:
     def __init__(self):
+        self.pot
+        self.player1_stack = 0
+        self.player2_stack = 0
         self.player1_hand = []
         self.player2_hand = []
         self.community_cards = []
@@ -142,7 +145,16 @@ class Game:
             return print(f"Player 2 wins {self.hand_ranks[player2_hand_rank]}")
         else:
             return self.tiebreaker(player1_hand,player2_hand)
-            
+    def pay(self,winner):
+        if winner == 1:
+            self.player1_stack += self.pot
+        else:
+            self.player2_stack += self.pot     
+    def split(self):
+        amount = self.pot / 2
+        self.pot = 0
+        self.player1_stack += amount
+        self.player2_stack += amount        
                 
     def main(self):
         self.preflop()

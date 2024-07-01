@@ -2,9 +2,9 @@ from game import *
 
 class Player:
     def __init__(self,uid):
-        self.id = uid
         self.game = Game()
         self.hand = game.player1_hand
+        self.id = uid
         self.folded = False
     def check(self):
         pass
