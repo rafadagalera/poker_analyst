@@ -1,6 +1,8 @@
 ## to do
 # currently the draw cards function does not remove the cards from the deck, fix that you pos
 # account for higher values when players have the same hand rank
+# fix pay function so it works for p2
+# implement turn logic to the game
 ## doing
 # high card
 ## done
@@ -20,10 +22,10 @@ from cards import *
 
 class Game:
     def __init__(self):
-        self.pot
+        self.pot = 1000
         self.player1_stack = 0
-        self.player2_stack = 0
         self.player1_hand = []
+        self.player2_stack = 0
         self.player2_hand = []
         self.community_cards = []
         self.cards = Cards()
@@ -114,10 +116,23 @@ class Game:
             return 8
         else:
             return 9
+                    
+    # Determine the winner of the hand
+    def showdown(self,player1_hand,player2_hand):
+        player1_hand_rank = self.determine_hand_rank(player1_hand)
+        player2_hand_rank = self.determine_hand_rank(player2_hand)
+        
+        if player1_hand_rank < player2_hand_rank:
+            print(f"Player 1 wins with {self.hand_ranks[player1_hand_rank]}")
+            self.pay(self.player1_stack)
+        elif player1_hand_rank > player2_hand_rank:
+            print(f"Player 2 wins {self.hand_ranks[player2_hand_rank]}")
+            self.pay(self.player2_stack)
+        else:
+            self.tiebreaker(player1_hand,player2_hand)
+        return self.pay()    
+        
     def tiebreaker(self,player1_hand,player2_hand):
-        # if both players have the same hand rank, we need to determine the winner based on the
-        # highest card in the hand. If the hands are still tied, we need to determine the
-        # winner based on the second highest card in the hand, and so on.
         player1_hand_sorted = self.sort_player_hand(player1_hand)
         player2_hand_sorted = self.sort_player_hand(player2_hand)
         if self.determine_hand_rank(player1_hand) == 9:
@@ -131,31 +146,25 @@ class Game:
                 elif player1_hand_sorted[1] < player1_hand_sorted[1]:
                     print("Player 2 wins with High Card", player2_hand_sorted[1])
                 else:
-                    return print("It's a tie! Split the pot")        
-        # elif self.determine_hand_rank(hand) == 8:
-                    
-    # Determine the winner of the hand
-    def showdown(self,player1_hand, player2_hand):
-        player1_hand_rank = self.determine_hand_rank(player1_hand)
-        player2_hand_rank = self.determine_hand_rank(player2_hand)
+                    print("It's a tie! Split the pot")       
+                    self.split()
+                 
+        # elif self.determine_hand_rank(hand) == 8:    
         
-        if player1_hand_rank < player2_hand_rank:
-            return print(f"Player 1 wins with {self.hand_ranks[player1_hand_rank]}")
-        elif player1_hand_rank > player2_hand_rank:
-            return print(f"Player 2 wins {self.hand_ranks[player2_hand_rank]}")
-        else:
-            return self.tiebreaker(player1_hand,player2_hand)
+    # These functions handle the chips distribution    
     def pay(self,winner):
-        if winner == 1:
+        if winner == self.player1_stack:
             self.player1_stack += self.pot
-        else:
-            self.player2_stack += self.pot     
+        elif winner == self.player2_stack:
+            self.player2_stack += self.pot       
+        self.pot = 0    
     def split(self):
         amount = self.pot / 2
         self.pot = 0
         self.player1_stack += amount
-        self.player2_stack += amount        
-                
+        self.player2_stack += amount     
+           
+    # Main function            
     def main(self):
         self.preflop()
         self.flop()
@@ -176,6 +185,8 @@ class Game:
         # print(self.sort_player_hand_values(player2_full_hand))
         print(self.sort_player_hand(player1_full_hand))
         print(self.sort_player_hand(player2_full_hand))
+        print(self.player1_stack)
+        print(self.player2_stack)
         
 game = Game()            
 game.main()
